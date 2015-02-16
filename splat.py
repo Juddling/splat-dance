@@ -60,6 +60,8 @@ dance_mat = DanceMat()
 
 
 def squish_bug():
+    global score
+
     score += score_increment
     score_sprite.change_score(score)
 
@@ -82,7 +84,7 @@ while True:
         if not isinstance(sprite, Bug):
             continue
 
-        if key_pressed not 0:
+        if key_pressed != 0:
             if sprite.key_match_position(event.key):
                 squish_bug()
             else:
