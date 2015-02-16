@@ -15,12 +15,34 @@ if dev.is_kernel_driver_active(interface) is True:
   dev.detach_kernel_driver(interface)
   # claim the device
   usb.util.claim_interface(dev, interface)
+
+
+def left_pressed(data):
+  return data & 128 == 128
+
+
+def up_pressed(data):
+  return data & 64 == 64
+
+
+def right_pressed(data):
+  return data & 16 == 16
+
+
+def down_pressed(data):
+  return data & 32 == 32
+
 collected = 0
-attempts = 50
+attempts = 250
 while collected < attempts :
     try:
         data = dev.read(endpoint.bEndpointAddress,endpoint.wMaxPacketSize)
         collected += 1
+        if left_pressed(data[5]):
+          print "left pressed"
+        if up_pressed(data[5]):
+          print "up pressed"
+
         print data
     except usb.core.USBError as e:
         data = None
