@@ -1,7 +1,7 @@
 import sys
 import pygame
 import random
-from Bug import Bug
+from Bug import Bug, Score
 
 pygame.init()
 
@@ -18,6 +18,7 @@ screen = pygame.display.set_mode(size)
 score = 0
 score_increment = 10
 score_decrement = 5
+
 
 def load_sound(name):
     class NoneSound:
@@ -52,26 +53,32 @@ def random_bug():
 fps_clock = pygame.time.Clock()
 punch_sound = load_sound("punch.wav")
 respawn_frames_remaining = 0
+score_sprite = Score()
+sprites.add(score_sprite)
 
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            for bug in sprites.sprites():
-                if bug.is_bug_at_position(event.key):
-                    score+=score_increment;
+            for sprite in sprites.sprites():
+                if not isinstance(sprite, Bug):
+                    continue
+
+                if sprite.is_bug_at_position(event.key):
+                    score += score_increment
+                    score_sprite.change_score(score)
+
                     punch_sound.play()
-                    bug.squish()
+                    sprite.squish()
                     respawn_frames_remaining = bug_delay_frames
-                    print score
                 else:
-                    score-=score_decrement
-                    print score
+                    score -= score_decrement
+                    score_sprite.change_score(score)
 
     screen.fill(background_colour)
 
-    if len(sprites.sprites()) == 0:
+    if len(sprites.sprites()) == 1:
         if respawn_frames_remaining == 0:
             sprites.add(random_bug())
         else:

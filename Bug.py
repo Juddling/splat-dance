@@ -39,3 +39,22 @@ class Bug(pygame.sprite.Sprite):
             return True
 
         return False
+
+
+class Score(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.font = pygame.font.Font(None, 20)
+        self.font.set_italic(1)
+        self.color = pygame.Color('white')
+        self.score = 0
+        self.change_score(self.score)
+        self.rect = self.image.get_rect().move(10, 450)
+
+    def update(self):
+        pass
+
+    def change_score(self, score):
+        self.score = score
+        msg = "Score: %d" % self.score
+        self.image = self.font.render(msg, 0, self.color)
