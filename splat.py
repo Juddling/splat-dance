@@ -6,10 +6,14 @@ from Bug import Bug
 pygame.init()
 
 size = width, height = 600, 600
-black = 0, 0, 0
+# black represented in red, green and blue
+background_colour = 0, 0, 0
 FPS = 30
-sprites = pygame.sprite.Group()
+# legnth of time in seconds for new bug to spawn
+bug_delay = 0.5
+bug_delay_frames = bug_delay * FPS
 
+sprites = pygame.sprite.Group()
 screen = pygame.display.set_mode(size)
 
 
@@ -45,8 +49,9 @@ def random_bug():
 
 fps_clock = pygame.time.Clock()
 punch_sound = load_sound("punch.wav")
+respawn_frames_remaining = 0
 
-while 1:
+while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
@@ -55,11 +60,15 @@ while 1:
                 if bug.is_bug_at_position(event.key):
                     punch_sound.play()
                     bug.squish()
+                    respawn_frames_remaining = bug_delay_frames
 
-    screen.fill(black)
+    screen.fill(background_colour)
 
     if len(sprites.sprites()) == 0:
-        sprites.add(random_bug())
+        if respawn_frames_remaining == 0:
+            sprites.add(random_bug())
+        else:
+            respawn_frames_remaining = respawn_frames_remaining - 1
 
     # calls update method on all sprites in group
     sprites.update()
@@ -67,5 +76,5 @@ while 1:
 
     pygame.display.flip()
 
-    # blocks to keep the loop running at the right no of FPS
+    # blocks to keep the loop running at the right number of FPS
     fps_clock.tick(FPS)
