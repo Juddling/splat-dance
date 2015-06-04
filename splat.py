@@ -1,4 +1,6 @@
-import sys, pygame
+import sys
+import pygame
+import random
 from Bug import Bug
 
 pygame.init()
@@ -10,29 +12,41 @@ sprites = pygame.sprite.Group()
 
 screen = pygame.display.set_mode(size)
 
-margin = 100
 
-bug_top = Bug(width/2, margin)
-bug_bottom = Bug(width/2, height-margin)
-bug_left = Bug(margin, height/2)
-bug_right = Bug(width-margin, height/2)
+def random_bug():
+    """
+    create a random bug in one of the four positions:
+    top, bottom, left or right
+    """
+    x = random.randint(1, 4)
+    margin = 100
 
-sprites.add(bug_top, bug_bottom, bug_left, bug_right)
+    if x == 1:
+        return Bug(width/2, margin)
+    elif x == 2:
+        return Bug(width/2, height-margin)
+    elif x == 3:
+        return Bug(margin, height/2)
+
+    return Bug(width-margin, height/2)
 
 fps_clock = pygame.time.Clock()
 
 while 1:
-	for event in pygame.event.get():
-		if event.type == pygame.QUIT:
-			sys.exit()
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            sys.exit()
 
-	screen.fill(black)
+    screen.fill(black)
 
-	# calls update method on all sprites in group
-	sprites.update()
-	sprites.draw(screen)
+    if len(sprites.sprites()) == 0:
+        sprites.add(random_bug())
 
-	pygame.display.flip()
+    # calls update method on all sprites in group
+    sprites.update()
+    sprites.draw(screen)
 
-	# blocks to keep the loop running at the right no of FPS
-	fps_clock.tick(FPS)
+    pygame.display.flip()
+
+    # blocks to keep the loop running at the right no of FPS
+    fps_clock.tick(FPS)
