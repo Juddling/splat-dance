@@ -15,7 +15,9 @@ bug_delay_frames = bug_delay * FPS
 
 sprites = pygame.sprite.Group()
 screen = pygame.display.set_mode(size)
-
+score = 0
+score_increment = 10
+score_decrement = 5
 
 def load_sound(name):
     class NoneSound:
@@ -58,9 +60,14 @@ while True:
         elif event.type == pygame.KEYDOWN:
             for bug in sprites.sprites():
                 if bug.is_bug_at_position(event.key):
+                    score+=score_increment;
                     punch_sound.play()
                     bug.squish()
                     respawn_frames_remaining = bug_delay_frames
+                    print score
+                else:
+                    score-=score_decrement
+                    print score
 
     screen.fill(background_colour)
 
