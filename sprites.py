@@ -25,17 +25,17 @@ class Bug(pygame.sprite.Sprite):
     def squish(self):
         self.kill()
 
-    def is_bug_at_position(self, key):
-        if key == pygame.K_UP and self.position == 1:
+    def is_bug_at_position(self, key, dance_mat):
+        if self.position == 1 and (key == pygame.K_UP or dance_mat.up_pressed()):
             return True
 
-        if key == pygame.K_DOWN and self.position == 2:
+        if self.position == 2 and (key == pygame.K_DOWN or dance_mat.up_pressed()):
             return True
 
-        if key == pygame.K_LEFT and self.position == 3:
+        if self.position == 3 and (key == pygame.K_LEFT or dance_mat.up_pressed()):
             return True
 
-        if key == pygame.K_RIGHT and self.position == 4:
+        if self.position == 4 and (key == pygame.K_RIGHT or dance_mat.up_pressed()):
             return True
 
         return False

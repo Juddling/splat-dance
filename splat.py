@@ -1,7 +1,8 @@
 import sys
 import pygame
 import random
-from Bug import Bug, Score
+from sprites import Bug, Score
+from usb_dance import DanceMat
 
 pygame.init()
 
@@ -55,8 +56,11 @@ punch_sound = load_sound("punch.wav")
 respawn_frames_remaining = 0
 score_sprite = Score()
 sprites.add(score_sprite)
+dance_mat = DanceMat()
 
 while True:
+    dance_mat.update()
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
@@ -65,7 +69,7 @@ while True:
                 if not isinstance(sprite, Bug):
                     continue
 
-                if sprite.is_bug_at_position(event.key):
+                if sprite.is_bug_at_position(event.key, dance_mat):
                     score += score_increment
                     score_sprite.change_score(score)
 
