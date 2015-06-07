@@ -58,27 +58,39 @@ score_sprite = Score()
 sprites.add(score_sprite)
 dance_mat = DanceMat()
 
+
+def squish_bug():
+    score += score_increment
+    score_sprite.change_score(score)
+
+    punch_sound.play()
+    sprite.squish()
+    respawn_frames_remaining = bug_delay_frames
+
 while True:
     dance_mat.update()
+
+    key_pressed = 0
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            for sprite in sprites.sprites():
-                if not isinstance(sprite, Bug):
-                    continue
+            key_pressed = event.key
 
-                if sprite.is_bug_at_position(event.key, dance_mat):
-                    score += score_increment
-                    score_sprite.change_score(score)
+    for sprite in sprites.sprites():
+        if not isinstance(sprite, Bug):
+            continue
 
-                    punch_sound.play()
-                    sprite.squish()
-                    respawn_frames_remaining = bug_delay_frames
-                else:
-                    score -= score_decrement
-                    score_sprite.change_score(score)
+        if key_pressed not 0:
+            if sprite.key_match_position(event.key):
+                squish_bug()
+            else:
+                score -= score_decrement
+                score_sprite.change_score(score)
+        else:
+            if sprite.dance_button_match_position(dance_mat):
+                squish_bug()
 
     screen.fill(background_colour)
 
@@ -96,3 +108,5 @@ while True:
 
     # blocks to keep the loop running at the right number of FPS
     fps_clock.tick(FPS)
+
+dance_mat.end()

@@ -21,16 +21,16 @@ class DanceMat():
     def update(self):
         self.data = dev.read(endpoint.bEndpointAddress, endpoint.wMaxPacketSize)
 
-    def left_pressed(self):
+    def left(self):
         return self.data[5] & 128 == 128
 
-    def up_pressed(self):
+    def up(self):
         return self.data[5] & 64 == 64
 
-    def right_pressed(self):
+    def right(self):
         return self.data[5] & 16 == 16
 
-    def down_pressed(self):
+    def down(self):
         return self.data[5] & 32 == 32
 
     def end(self):
