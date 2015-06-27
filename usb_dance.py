@@ -13,6 +13,9 @@ if dev.is_kernel_driver_active(interface) is True:
     dev.detach_kernel_driver(interface)
     usb.util.claim_interface(dev, interface)
 
+# un-comment and sudo python this file to see raw data from dance mat
+# while True:
+#    print (dev.read(endpoint.bEndpointAddress, endpoint.wMaxPacketSize))
 
 class DanceMat():
     def __init__(self):
@@ -32,6 +35,18 @@ class DanceMat():
 
     def down(self):
         return self.data[5] & 32 == 32
+
+    def top_right(self):
+        return self.data[6] & 8 == 8
+
+    def top_left(self):
+        return self.data[6] & 4 == 4
+
+    def bottom_left(self):
+        return self.data[6] & 2 == 2
+
+    def bottom_right(self):
+        return self.data[6] & 1 == 1
 
     def end(self):
         usb.util.release_interface(dev, interface)
